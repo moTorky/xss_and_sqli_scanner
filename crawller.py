@@ -106,22 +106,22 @@ def dump_req_and_prams(dir_name,requests_list):
 #---------------------------------------------------------
 def wite_req_and_prams_to_file(dir_name,requests_list):
     with open(dir_name+'/endpoints_with_param.txt', 'w') as file:
-    for cReq in my_reqs:
-        p = ''
-        for param in cReq.params:
-            param=str(param)
-            p += param + "=mrt&"
-        line=cReq.url + '?' + p
-        file.write(line + '\n')
+        for cReq in requests_list:
+            p = ''
+            for param in cReq.params:
+                param=str(param)
+                p += param + "=mrt&"
+            line=cReq.url + '?' + p
+            file.write(line + '\n')
 
 #help msg and banner and check for sqlmap in /usr/share/sqlmap/sqlmap.py and xsstrike.py in ./XSStrike/xsstrike.py
 print('this script depends on \tXSStrike for xss scan and \tsqlmap for sqli scan')
 
 # Construct absolute paths for xsstrike.py and headers file
-headers_path = os.path.join(os.path.expanduser("~"), "header.txt")
-xsstrike_path = os.path.join(os.path.expanduser("~"), "XSStrike/xsstrike.py")
+headers_path = os.path.join("header.txt")
+xsstrike_path = os.path.join("XSStrike/xsstrike.py")
 # Construct absolute paths for sqlmap.py and headers file
-sqlmap_path = os.path.join(os.path.expanduser("~"), "/usr/share/sqlmap/sqlmap.py")
+sqlmap_path = os.path.join("/usr/share/sqlmap/sqlmap.py")
 
 # Verify xsstrike.py file exists at the specified path
 if not os.path.isfile(xsstrike_path):
@@ -189,7 +189,7 @@ print('xsstrike logs saved to xss_log_file')
 
 import subprocess
 
-with open('xss_log_file',w) as file:
+with open(dir_name+'/xss_log_file','w') as file:
     file.write("xsstrike logs")
 # Define the command and arguments for xsstrike.py
 
