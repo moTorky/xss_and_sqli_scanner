@@ -117,8 +117,18 @@ def wite_req_and_prams_to_file(dir_name,requests_list):
 #help msg and banner and check for sqlmap in /usr/share/sqlmap/sqlmap.py and xsstrike.py in ./XSStrike/xsstrike.py
 print('this script depends on \tXSStrike for xss scan and \tsqlmap for sqli scan')
 
+# Get user input
+parser = argparse.ArgumentParser()
+parser.add_argument('-u', '--url', help='url', dest='target')
+parser.add_argument('--header_file', help='add headers',dest='headers_file', nargs='?', const=True)
+args = parser.parse_args()
+
+base_url = args.target #'http://testphp.vulnweb.com/'
+headers_file = args.headers_file #'header.txt' 
+
+
 # Construct absolute paths for xsstrike.py and headers file
-headers_path = os.path.join("header.txt")
+headers_path = os.path.join(headers_file)
 xsstrike_path = os.path.join("XSStrike/xsstrike.py")
 # Construct absolute paths for sqlmap.py and headers file
 sqlmap_path = os.path.join("/usr/share/sqlmap/sqlmap.py")
@@ -135,15 +145,6 @@ if not os.path.isfile(headers_path):
 if not os.path.isfile(sqlmap_path):
     print("Error: sqlmap.py file not found at", sqlmap_path,"plz download it :)")
     exit(1)
-
-# Get user input
-parser = argparse.ArgumentParser()
-parser.add_argument('-u', '--url', help='url', dest='target')
-parser.add_argument('--header_file', help='add headers',dest='headers_file', nargs='?', const=True)
-args = parser.parse_args()
-
-base_url = args.target #'http://testphp.vulnweb.com/'
-headers_file = args.headers_file #'header.txt' 
 
 # Read headers from file
 headers = {}
@@ -215,7 +216,8 @@ print('sqlmap logs saved under sqli_log_files directory')
 
 # Define the command and arguments for sqlmap.py
 # Define common sqlmap command arguments
-sqlmap_common_args = ["--batch", "--banner", '--risk=3', '--level=5', '--output-dir=testphp_vulnweb_com/sqli_log_files', '--headers='+header_str]
+sqlmap_output_dir=dir_name+'/sqli_log_files'
+sqlmap_common_args = ["--batch", "--banner", '--risk=3', '--level=5', '--output-dir='+sqlmap_output_dir, '--headers='+header_str]
 
 # Loop over the requests list
 for request in my_reqs:
